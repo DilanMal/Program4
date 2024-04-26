@@ -44,10 +44,10 @@ CREATE TABLE Prize (
 CREATE TABLE CouponXact (
     CXactID int NOT NULL PRIMARY KEY, 
     MemberID int NOT NULL, 
-    CoupID int NOT NULL);
+    CouponID int NOT NULL);
 
 CREATE TABLE Coupon (
-    CoupID int NOT NULL PRIMARY KEY, 
+    CouponID int NOT NULL PRIMARY KEY, 
     FoodItem varchar2(255));
 
 GRANT SELECT, DELETE, INSERT, UPDATE ON Membership TO PUBLIC;
