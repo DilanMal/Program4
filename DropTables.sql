@@ -1,0 +1,16 @@
+
+DROP TABLE Membership;
+
+DROP TABLE Game;
+
+DROP TABLE GameXact;
+
+DROP TABLE TTXact;
+
+DROP TABLE PrizeXact;
+
+DROP TABLE Prize;
+
+DROP TABLE Coupon;
+
+DROP TABLE CouponXact;
