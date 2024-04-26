@@ -29,7 +29,7 @@ CREATE TABLE TTXact (
     MemberID int NOT NULL, 
     Category varChar2(255), 
     Amount int NOT NULL, 
-    Date DATE);
+    TDate DATE);
 
 CREATE TABLE PrizeXact (
     PXactID int NOT NULL PRIMARY KEY, 
