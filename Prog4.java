@@ -31,7 +31,6 @@ import java.util.Random;
  * 
  * Pre-requisites: Data should be in the database, and JDBC should be setup
  * 
- * 
 */
 public class Prog4{
 
