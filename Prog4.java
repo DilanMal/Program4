@@ -7,7 +7,9 @@
  * Instructor: L McCan
  * TAs: Amhad Musa, Jake Bode, Priyansh Nayak
  * 
- * Description: **********************************************************************************
+ * Description: Program for an arcade, that employees can use to add/track transactions
+ *              member data, prizes, gifts and even coupons. Determine high scores/leaderboard stats 
+ *              for the clients and give discounts based on their tiers.
  * 
  * Language: Java 16
  * Other Requirements: None
@@ -31,6 +33,9 @@ import java.util.Random;
  * 
  * Pre-requisites: Data should be in the database, and JDBC should be setup
  * 
+ * Other methods inside this class:
+ * private static int promptInput(Scanner kb)
+ * private static int generateRandomId(Statement stmt, String tableName, String idColumnName)
 */
 public class Prog4{
 
@@ -87,15 +92,15 @@ public class Prog4{
     }
 
     /**
+     * generates a random ID within a specified range and ensures its uniqueness within a given database table
      *
-     *
-     * @param
-     * @param
-     * @param
-     * @return
+     * @param stmt SQL statement object for executing queries
+     * @param tableName name of the table in the database
+     * @param idColumnName name of the column containing IDs in the table
+     * @return randomId unique random ID
      * 
-     * pre-conditions:
-     * post-conditions:
+     * pre-conditions: stmt must be valid and DB connection must be established
+     * post-conditions: returns a unique id
      */
     private static int generateRandomId(Statement stmt, String tableName, String idColumnName) {
         int minId = 10000;
@@ -302,6 +307,19 @@ public class Prog4{
                         String deleteQuery = "DELETE FROM dilanm.Membership WHERE MemberID = " + memberIdToDelete;
                         int rowsDeleted = stmt.executeUpdate(deleteQuery);
 
+                        // Delete associated data from other tables
+                        String deleteGameXactQuery = "DELETE FROM dilanm.GameXact WHERE MemberID = " + memberIdToDelete;
+                        stmt.executeUpdate(deleteGameXactQuery);
+
+                        String deleteTTXactQuery = "DELETE FROM dilanm.TTXact WHERE MemberID = " + memberIdToDelete;
+                        stmt.executeUpdate(deleteTTXactQuery);
+
+                        String deletePrizeXactQuery = "DELETE FROM dilanm.PrizeXact WHERE MemberID = " + memberIdToDelete;
+                        stmt.executeUpdate(deletePrizeXactQuery);
+
+                        String deleteCouponXactQuery = "DELETE FROM dilanm.CouponXact WHERE MemberID = " + memberIdToDelete;
+                        stmt.executeUpdate(deleteCouponXactQuery);
+
                         if (rowsDeleted > 0) {
                             System.out.println("Member deleted successfully!");
                         } else {
@@ -315,7 +333,7 @@ public class Prog4{
                 case 4:
                     // add a game
                     try {
-                        int gameId = generateRandomId(stmt, "dilanm.Game", "ID");
+                        int gameId = generateRandomId(stmt, "dilanm.Game", "GameID");
                         System.out.print("Enter game name: ");
                         String gameName = kb.nextLine();
                         System.out.print("Enter token cost for the game: ");
@@ -401,8 +419,8 @@ public class Prog4{
                         // Display results
                         System.out.println("Arcade rewards that members can purchase with tickets:");
                         while (resultSet.next()) {
-                            String prizeName = resultSet.getString("name");
-                            int ticketCost = resultSet.getInt("tickets");
+                            String prizeName = resultSet.getString("PName");
+                            int ticketCost = resultSet.getInt("TicketCost");
                             System.out.println(prizeName + " - Ticket Cost: " + ticketCost);
                         }
                 
@@ -427,8 +445,8 @@ public class Prog4{
                         resultSet.beforeFirst();
                         System.out.println("Affordable prizes for member " + memberId + ":");
                         while (resultSet.next()) {
-                            String prizeName = resultSet.getString("name");
-                            int ticketCost = resultSet.getInt("tickets");
+                            String prizeName = resultSet.getString("PName");
+                            int ticketCost = resultSet.getInt("TicketCost");
                             if (availableTickets >= ticketCost) {
                                 System.out.println(prizeName + " - Ticket Cost: " + ticketCost);
                             }
@@ -436,7 +454,6 @@ public class Prog4{
                     } catch (Exception e) {
                         System.out.println("Error");
                     }
-
                     break;
                 
                 case 11:
