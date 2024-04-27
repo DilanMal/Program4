@@ -195,28 +195,41 @@ public class Prog4{
             switch (menuChoice) {
 
                 case 1:
-
+                    // add a member
                     try {
-                        int randomMemberId = generateRandomId(stmt, "Members", "member_id");
+                        int randomMemberId = generateRandomId(stmt, "dilanm.Membership", "MemberID");
                 
                         System.out.print("Enter member name: ");
                         String name = kb.nextLine();
                         System.out.print("Enter telephone number: ");
                         String phoneNumber = kb.nextLine();
+                        if (!phoneNumber.matches("\\d{10}")) {
+                            System.out.println("Error: Number not 10 digits");
+                            break;
+                        }
                         System.out.print("Enter home address: ");
                         String address = kb.nextLine();
+
+                        double totalSpent = 0;
+                        java.util.Date currentDate = new java.util.Date();
+                        java.sql.Date lastDate = new java.sql.Date(currentDate.getTime());
+                        int tickets = 0;
+                        int tokens = 0;
                 
-                        String insertQuery = "INSERT INTO Members (member_id, name, phone_number, address) " +
-                                            "VALUES (" + randomMemberId + ", '" + name + "', '" + phoneNumber + "', '" + address + "')";
+                        String insertQuery = "INSERT INTO dilanm.Membership (MemberID, Name, TeleNum, Addr, TotalSpend, LastDate, Tickets, Tokens) " +
+                        "VALUES (" + randomMemberId + ", '" + name + "', '" + phoneNumber + "', '" + address + "', " +
+                        totalSpent + ", '" + lastDate + "', " + tickets + ", " + tokens + "')";
+                        
                         stmt.executeUpdate(insertQuery);
                         System.out.println("New member added successfully!");
+
                     } catch (Exception e) {
                         System.out.println("Error: Invalid data");
                     }
                     break;
             
                 case 2:
-
+                    // update a member
                     try {
                         System.out.print("Enter member ID to update: ");
                         int memberId;
@@ -228,7 +241,7 @@ public class Prog4{
                         }
                 
                         //does the member exist
-                        String checkMemberQuery = "SELECT COUNT(*) FROM Members WHERE member_id = " + memberId;
+                        String checkMemberQuery = "SELECT COUNT(*) FROM dilanm.Membership WHERE MemberID = " + memberId;
                         ResultSet checkResult = stmt.executeQuery(checkMemberQuery);
                         checkResult.next();
                         int memberCount = checkResult.getInt(1);
@@ -247,15 +260,15 @@ public class Prog4{
                         String columnToUpdate = "";
                         switch (choice) {
                             case 1:
-                                columnToUpdate = "name";
+                                columnToUpdate = "Name";
                                 System.out.print("Enter new name: ");
                                 break;
                             case 2:
-                                columnToUpdate = "phone_number";
+                                columnToUpdate = "TeleNum";
                                 System.out.print("Enter new telephone number: ");
                                 break;
                             case 3:
-                                columnToUpdate = "address";
+                                columnToUpdate = "Addr";
                                 System.out.print("Enter new home address: ");
                                 break;
                             default:
@@ -267,7 +280,7 @@ public class Prog4{
                         if (choice == 1 || choice == 2 || choice == 3) {
                             String newValue = kb.nextLine();
                 
-                            String updateQuery = "UPDATE Members SET " + columnToUpdate + " = '" + newValue + "' WHERE member_id = " + memberId;
+                            String updateQuery = "UPDATE dilanm.Membership SET " + columnToUpdate + " = '" + newValue + "' WHERE MemberID = " + memberId;
                             int rowsAffected = stmt.executeUpdate(updateQuery);
                             if (rowsAffected > 0) {
                                 System.out.println("Member details updated successfully!");
@@ -281,12 +294,12 @@ public class Prog4{
                     break;
                                     
                 case 3:
-
+                    // delete a member
                     try {
                         System.out.print("Enter member ID to delete: ");
                         int memberIdToDelete = Integer.parseInt(kb.nextLine());
                 
-                        String deleteQuery = "DELETE FROM Members WHERE member_id = " + memberIdToDelete;
+                        String deleteQuery = "DELETE FROM dilanm.Membership WHERE MemberID = " + memberIdToDelete;
                         int rowsDeleted = stmt.executeUpdate(deleteQuery);
 
                         if (rowsDeleted > 0) {
@@ -300,15 +313,15 @@ public class Prog4{
                     break;
                 
                 case 4:
-
+                    // add a game
                     try {
-                        int gameId = generateRandomId(stmt, "Game", "ID");
+                        int gameId = generateRandomId(stmt, "dilanm.Game", "ID");
                         System.out.print("Enter game name: ");
                         String gameName = kb.nextLine();
                         System.out.print("Enter token cost for the game: ");
                         int cost = Integer.parseInt(kb.nextLine());
                 
-                        String insertQuery = "INSERT INTO Game (ID, name, ticket_cost) VALUES (" + gameId + ", '" + gameName + "', " + cost + ")";
+                        String insertQuery = "INSERT INTO dilanm.Game (GameID, GName, TokenCost) VALUES (" + gameId + ", '" + gameName + "', " + cost + ")";
                         stmt.executeUpdate(insertQuery);
                         System.out.println("New game added successfully!");
                     } catch (NumberFormatException e) {
@@ -317,12 +330,12 @@ public class Prog4{
                     break;
 
                 case 5:
-
+                    // delete a member
                     try {
                         System.out.print("Enter game ID to delete: ");
                         int gameId = Integer.parseInt(kb.nextLine());
                 
-                        String deleteQuery = "DELETE FROM Game WHERE ID = " + gameId;
+                        String deleteQuery = "DELETE FROM dilanm.Game WHERE GameID = " + gameId;
                         int rowsAffected = stmt.executeUpdate(deleteQuery);
                         if (rowsAffected > 0) {
                             System.out.println("Game deleted successfully!");
@@ -335,15 +348,15 @@ public class Prog4{
                     break;
 
                 case 6:
-
+                    // add a prize
                     try {
-                        int prizeId = generateRandomId(stmt, "Prizes", "Prize_ID");
+                        int prizeId = generateRandomId(stmt, "dilanm.Prize", "PrizeID");
                         System.out.print("Enter prize name: ");
                         String prizeName = kb.nextLine();
                         System.out.print("Enter ticket cost for the prize: ");
                         int ticketCost = Integer.parseInt(kb.nextLine());
 
-                        String insertQuery = "INSERT INTO Prizes (Prize_ID, name, tickets) VALUES (" + prizeId + ", '" + prizeName + "', " + ticketCost + ")";
+                        String insertQuery = "INSERT INTO dilanm.Prize (PrizeID, PName, TicketCost) VALUES (" + prizeId + ", '" + prizeName + "', " + ticketCost + ")";
                         stmt.executeUpdate(insertQuery);
                         System.out.println("New prize added successfully!");
                     } catch (NumberFormatException e) {
@@ -352,12 +365,12 @@ public class Prog4{
                     break;
 
                 case 7:
-    
+                    // delete a prize
                     try {
                         System.out.print("Enter prize ID to delete: ");
                         int prizeId = Integer.parseInt(kb.nextLine());
                 
-                        String deleteQuery = "DELETE FROM Prizes WHERE Prize_ID = " + prizeId;
+                        String deleteQuery = "DELETE FROM dilanm.Prize WHERE PrizeID = " + prizeId;
                         int rowsAffected = stmt.executeUpdate(deleteQuery);
                         if (rowsAffected > 0) {
                             System.out.println("Prize deleted successfully!");
@@ -370,17 +383,19 @@ public class Prog4{
                     break;
 
                 case 8:
+                    //high scores
                     break;
 
                 case 9:
+                    //100 spend
                     break;
 
                 case 10:
-
+                    //prizes they can buy
                     try {
                         // Execute SQL query to list arcade rewards that members can purchase with tickets
-                        String query = "SELECT Prizes.name, Prizes.tickets " +
-                                       "FROM Prizes";
+                        String query = "SELECT Prize.PName, Prize.TicketCost " +
+                                       "FROM dilanm.Prize";
                         ResultSet resultSet = stmt.executeQuery(query);
                 
                         // Display results
@@ -397,8 +412,8 @@ public class Prog4{
                 
                         //retrieve member's available tickets
                         String ticketQuery = "SELECT Tickets " +
-                                             "FROM Membership " +
-                                             "WHERE Member_ID = " + memberId;
+                                             "FROM dilanm.Membership " +
+                                             "WHERE MemberID = " + memberId;
                         ResultSet ticketResult = stmt.executeQuery(ticketQuery);
                         int availableTickets = 0;
                         if (ticketResult.next()) {
@@ -409,7 +424,7 @@ public class Prog4{
                         System.out.println("Available tickets for member " + memberId + ": " + availableTickets);
                 
                         //Iterate through prizes again to check affordability
-                        resultSet.beforeFirst(); // Reset resultSet cursor
+                        resultSet.beforeFirst();
                         System.out.println("Affordable prizes for member " + memberId + ":");
                         while (resultSet.next()) {
                             String prizeName = resultSet.getString("name");
@@ -425,6 +440,7 @@ public class Prog4{
                     break;
                 
                 case 11:
+                    //custom query
                     break;        
 
             }
