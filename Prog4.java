@@ -41,7 +41,9 @@ public class Prog4{
 
     //text to be displayed when prompted
     private final static String text = "\nText menu. Select out of options 0-11: \n" +
+
             "Administrative: \n" +
+    
             "1 -- Add a new member\n" +
             "2 -- Update member details.\n" +
             "3 -- Delete a member\n" +
