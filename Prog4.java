@@ -633,8 +633,7 @@ public class Prog4{
                         e.printStackTrace();
                         System.out.println("An error occurred while processing the request.");
                     }
-                    break;
-                
+                    break;   
             }
             stmt.close();
             menuChoice = promptInput(kb);
