@@ -462,34 +462,45 @@ public class Prog4{
                         		+ "HAVING sum(Amount) > 10";
                         ResultSet resultSet = stmt.executeQuery(query);
                         
+                        //Create second stmt
+                        Statement stmt2 = dbconn.createStatement();
+                        
                         //Prints Member info
                         while (resultSet.next()) {
                         	//Get member
                         	query = "SELECT * FROM dilanm.Membership WHERE memberID = " + 
                         			String.valueOf(resultSet.getInt("memberID"));
-                        	ResultSet memberInfo = stmt.executeQuery(query);
+
+                        	ResultSet memberInfo = stmt2.executeQuery(query);
                         	
                         	if(!memberInfo.next()) {
                         		System.out.println("No members");
+                        		stmt2.close();
                         		break;
                         	}
                         	
                         	//Print Info
                             System.out.println("MemberID: " + memberInfo.getString("MemberID")
-                            		+ "Name: " + memberInfo.getString("Name")
-                            		+ "TeleNum: " + String.valueOf(memberInfo.getInt("TeleNum"))
-                            		+ "Address: " + memberInfo.getString("Addr")
-                            		+ "TotalSpend: " + String.valueOf(memberInfo.getInt("TotalSpend"))
-                            		+ "LastDate: " + memberInfo.getDate("LastDate")
-                            		+ "Tickets: " + String.valueOf(memberInfo.getInt("Tickets"))
-                            		+ "Tokens: " + String.valueOf(memberInfo.getInt("Tokens")));
+                            		+ "\nName: " + memberInfo.getString("Name")
+                            		+ "\nTeleNum: " + String.valueOf(memberInfo.getDouble("TeleNum"))
+                            		+ "\nAddress: " + memberInfo.getString("Addr")
+                            		+ "\nTotalSpend: " + String.valueOf(memberInfo.getInt("TotalSpend"))
+                            		+ "\nLastDate: " + memberInfo.getDate("LastDate")
+                            		+ "\nTickets: " + String.valueOf(memberInfo.getInt("Tickets"))
+                            		+ "\nTokens: " + String.valueOf(memberInfo.getInt("Tokens")) + "\n");
                         }
                         
-                    } catch (Exception e) {
-                        System.out.println("Error");
+                        stmt2.close();
+                    } catch (SQLException e) {
+    	                System.err.println("*** SQLException:  "
+    	                    + "Could not open JDBC connection.");
+    	                System.err.println("\tMessage:   " + e.getMessage());
+    	                System.err.println("\tSQLState:  " + e.getSQLState());
+    	                System.err.println("\tErrorCode: " + e.getErrorCode());
+    	                System.exit(-1);
                     }
                     break;
-
+                    
                 case 10:
                     // prizes they can buy
                     try {
