@@ -567,7 +567,7 @@ public class Prog4{
                     System.out.print("Enter game name: ");
                     String gameName = kb.nextLine();
                 
-                    System.out.println("Scores for " + memID + " on game, " + gameName);
+                    System.out.println("\nScores for " + memID + " on game, " + gameName);
                     System.out.println("---------------------------------------------");
                 
                     try {
