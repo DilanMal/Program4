@@ -419,13 +419,16 @@ public class Prog4{
                 case 8:
                     //high scores
                 	try {
-                		System.out.println("Game: High Score Holder");
+                		System.out.println("Game: Top Scorer Name");
                 		System.out.println("---------------------");
                 		  
                 		//SQL query to get game names
                 		String query = "SELECT DISTINCT Game.GameID, Game.GName FROM dilanm.Game";
                 		ResultSet game_rslt = stmt.executeQuery(query);
-                        
+                		
+                		//Create second stmt
+                        Statement stmt2 = dbconn.createStatement();
+                		
                 		//Iterate through game names and get highest scorer for game
                 		while (game_rslt.next()) {
                 			int gid = game_rslt.getInt("GameID");
@@ -435,15 +438,23 @@ public class Prog4{
                 					+ " AND Membership.MemberID = GameXact.MemberID ORDER BY Score DESC)"
                 					+ " WHERE ROWNUM = 1";
                 			
-                			ResultSet score_rslt = stmt.executeQuery(query);
+                			ResultSet score_rslt = stmt2.executeQuery(query);
                 			
                 			//Print Game and top scorer
                 			if(score_rslt.next()) {
-                				System.out.println(game_rslt.getString("GName") + ": " + score_rslt.getString("Name"));
+                				System.out.println(game_rslt.getString("GName") + ": " + score_rslt.getString("Name") + "\n");
+                			}else {
+                				System.out.println(game_rslt.getString("GName") + ": No Scores\n");
                 			}
                 		}
-                	} catch (Exception e) {
-                        System.out.println("Error");
+                		stmt2.close();
+                	 } catch (SQLException e) {
+     	                System.err.println("*** SQLException:  "
+     	                    + "Could not open JDBC connection.");
+     	                System.err.println("\tMessage:   " + e.getMessage());
+     	                System.err.println("\tSQLState:  " + e.getSQLState());
+     	                System.err.println("\tErrorCode: " + e.getErrorCode());
+     	                System.exit(-1);
                 	}
                     break;
 
