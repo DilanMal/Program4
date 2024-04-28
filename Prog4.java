@@ -62,6 +62,8 @@ public class Prog4{
             "9 -- Members who have spent more than $100 in the past month \n" +
             "10 -- Arcade rewards the members can purchase with tickets \n" +
             "11 -- Member scores in each game-play for a specific game \n" +
+            "12 -- Do the members get any coupons today? \n" +
+            "13 -- What is the membership tier and benefits? \n" +
             
             "0 -- exit\n";
 
@@ -90,7 +92,9 @@ public class Prog4{
                 case "8":                
                 case "9":                
                 case "10":                
-                case "11":                
+                case "11":       
+                case "12":                
+                case "13":                
                 kb.nextLine();
                 return Integer.parseInt(result);
             }
@@ -563,7 +567,52 @@ public class Prog4{
                         e.printStackTrace();
                         System.out.println("Error executing SQL query: " + e.getMessage());
                     }
-                    break;                     
+                    break;          
+                    
+                case 12:
+                    //member coupons
+                    break;
+
+                case 13:
+                    // Determine membership tier and benefits for a given member ID
+                    try {
+                        // Get member ID input from the user
+                        System.out.print("Enter member ID: ");
+                        int memberId = Integer.parseInt(kb.nextLine());
+                
+                        // Query to retrieve total spend for the given member ID
+                        String query = "SELECT TotalSpend FROM dilanm.Membership WHERE MemberID = " + memberId;
+                        ResultSet resultSet = stmt.executeQuery(query);
+                
+                        if (resultSet.next()) {
+                            double totalSpend = resultSet.getDouble("TotalSpend");
+                            String membershipTier;
+                            String membershipBenefits;
+                
+                            // Determine membership tier and benefits based on total spend
+                            if (totalSpend >= 500) {
+                                membershipTier = "Diamond";
+                                membershipBenefits = "10% Discount, 10,000 free tickets";
+                            } else if (totalSpend >= 250) {
+                                membershipTier = "Gold";
+                                membershipBenefits = "10% Discount, 5,000 free tickets";
+                            } else {
+                                membershipTier = "Regular";
+                                membershipBenefits = "No additional benefits";
+                            }
+                
+                            // Display membership tier and benefits
+                            System.out.println("Membership Tier: " + membershipTier);
+                            System.out.println("Membership Benefits: " + membershipBenefits);
+                        } else {
+                            System.out.println("Member ID " + memberId + " not found.");
+                        }
+                    } catch (SQLException | NumberFormatException e) {
+                        e.printStackTrace();
+                        System.out.println("An error occurred while processing the request.");
+                    }
+                    break;
+                
             }
             stmt.close();
             menuChoice = promptInput(kb);
