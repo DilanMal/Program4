@@ -62,7 +62,7 @@ public class Prog4{
             "9 -- Members who have spent more than $100 in the past month \n" +
             "10 -- Arcade rewards the members can purchase with tickets \n" +
             "11 -- Member scores in each game-play for a specific game \n" +
-
+            
             "0 -- exit\n";
 
     /**
@@ -533,35 +533,38 @@ public class Prog4{
                     }
                     break;
                 
-                case 11:
-                    //custom query
-                    //Get inputs
-                	System.out.print("Enter member ID: ");
+                    case 11:
+                    // Custom query
+                    // Get inputs
+                    System.out.print("Enter member ID: ");
                     String memID = kb.nextLine();
                     System.out.print("Enter game name: ");
                     String gameName = kb.nextLine();
-                    
+                
                     System.out.println("Scores for " + memID + " on game, " + gameName);
                     System.out.println("---------------------------------------------");
-                    
+                
                     try {
-                        // Execute SQL query to get all plays of
-                        String query = "SELECT Score FROM dilanm.GameXact WHERE GameID = (Select GameID "
-                        		+ "FROM dilanm.Game WHERE GName = " + gameName + ") " 
-                        		+ "AND MemberID = " + memID + " ORDER BY SCORE";
+                        // Execute SQL query to get all plays
+                        String query = "SELECT Score FROM dilanm.GameXact WHERE GameID = (SELECT GameID FROM dilanm.Game WHERE GName = '" + gameName + "') AND MemberID = '" + memID + "' ORDER BY Score";
                         ResultSet resultSet = stmt.executeQuery(query);
-                        
-                        //Prints scores for user 
-                        int count = 1; 
-                        while (resultSet.next()) {
-                            System.out.println(String.valueOf(count) + ". " + String.valueOf(resultSet.getInt("Score")));
+                
+                        // Check if the result set is empty
+                        if (!resultSet.next()) {
+                            System.out.println("No scores found for member " + memID + " on game " + gameName);
+                        } else {
+                            // Prints scores for user
+                            int count = 1;
+                            do {
+                                System.out.println(String.valueOf(count) + ". " + resultSet.getInt("Score"));
+                                count++;
+                            } while (resultSet.next());
                         }
-                        
-                    } catch (Exception e) {
-                        System.out.println("Error");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        System.out.println("Error executing SQL query: " + e.getMessage());
                     }
-                    break;        
-
+                    break;                     
             }
             stmt.close();
             menuChoice = promptInput(kb);
