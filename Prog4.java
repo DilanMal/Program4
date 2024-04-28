@@ -487,6 +487,31 @@ public class Prog4{
                 
                 case 11:
                     //custom query
+                    //Get inputs
+                	System.out.print("Enter member ID: ");
+                    String memID = kb.nextLine();
+                    System.out.print("Enter game name: ");
+                    String gameName = kb.nextLine();
+                    
+                    System.out.println("Scores for " + memID + "on game, " + gameName);
+                    System.out.println("---------------------------------------------");
+                    
+                    try {
+                        // Execute SQL query to get all plays of
+                        String query = "SELECT Score FROM dilanm.GameXact WHERE GameID = (Select GameID "
+                        		+ "FROM dilanm.Game WHERE GName = " + gameName + ") " 
+                        		+ "AND MemberID = " + memID + " ORDER BY SCORE";
+                        ResultSet resultSet = stmt.executeQuery(query);
+                        
+                        //Prints scores for user 
+                        int count = 1; 
+                        while (resultSet.next()) {
+                            System.out.println(String.valueOf(count) + ". " + String.valueOf(resultSet.getInt("Score")));
+                        }
+                        
+                    } catch (Exception e) {
+                        System.out.println("Error");
+                    }
                     break;        
 
             }
