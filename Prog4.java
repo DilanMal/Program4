@@ -22,6 +22,8 @@
  */
 import java.io.*;
 import java.sql.*;                 // For access to the SQL interaction methods
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -217,15 +219,21 @@ public class Prog4{
                         System.out.print("Enter home address: ");
                         String address = kb.nextLine();
 
-                        double totalSpent = 0;
+                        int totalSpent = 0;
+                        
                         java.util.Date currentDate = new java.util.Date();
                         java.sql.Date lastDate = new java.sql.Date(currentDate.getTime());
+                        
                         int tickets = 0;
                         int tokens = 0;
-                
+
+                        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+                        String formattedDate = df.format(lastDate);
+
                         String insertQuery = "INSERT INTO dilanm.Membership (MemberID, Name, TeleNum, Addr, TotalSpend, LastDate, Tickets, Tokens) " +
                         "VALUES (" + randomMemberId + ", '" + name + "', '" + phoneNumber + "', '" + address + "', " +
-                        totalSpent + ", '" + lastDate + "', " + tickets + ", " + tokens + "')";
+                        totalSpent + ", TO_DATE('" + formattedDate + "', 'MM/DD/YYYY'), " + tickets + ", " + tokens + ")";
+
                         
                         stmt.executeUpdate(insertQuery);
                         System.out.println("New member added successfully!");
@@ -411,7 +419,7 @@ public class Prog4{
                 		//SQL query to get game names
                 		String query = "SELECT DISTINCT Game.GameID, Game.GName FROM dilanm.Game";
                 		ResultSet game_rslt = stmt.executeQuery(query);
-                		
+                        
                 		//Iterate through game names and get highest scorer for game
                 		while (game_rslt.next()) {
                 			int gid = game_rslt.getInt("GameID");
@@ -469,7 +477,7 @@ public class Prog4{
                 
                         //available tickets
                         System.out.println("Available tickets for member " + memberId + ": " + availableTickets);
-                
+                        //FIX THISS!!!!!
                         //Iterate through prizes again to check affordability
                         resultSet.beforeFirst();
                         System.out.println("Affordable prizes for member " + memberId + ":");
@@ -493,7 +501,7 @@ public class Prog4{
                     System.out.print("Enter game name: ");
                     String gameName = kb.nextLine();
                     
-                    System.out.println("Scores for " + memID + "on game, " + gameName);
+                    System.out.println("Scores for " + memID + " on game, " + gameName);
                     System.out.println("---------------------------------------------");
                     
                     try {
