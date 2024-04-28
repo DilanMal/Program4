@@ -533,7 +533,7 @@ public class Prog4{
                     }
                     break;
                 
-                    case 11:
+                case 11:
                     // Custom query
                     // Get inputs
                     System.out.print("Enter member ID: ");
@@ -548,8 +548,7 @@ public class Prog4{
                         // Execute SQL query to get all plays
                         String query = "SELECT Score FROM dilanm.GameXact WHERE GameID = (SELECT GameID FROM dilanm.Game WHERE GName = '" + gameName + "') AND MemberID = '" + memID + "' ORDER BY Score";
                         ResultSet resultSet = stmt.executeQuery(query);
-                
-                        // Check if the result set is empty
+
                         if (!resultSet.next()) {
                             System.out.println("No scores found for member " + memID + " on game " + gameName);
                         } else {
