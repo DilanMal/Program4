@@ -416,8 +416,8 @@ public class Prog4{
                 		while (game_rslt.next()) {
                 			int gid = game_rslt.getInt("GameID");
                 			query = "SELECT Name, Score FROM ("
-                					+ "SELECT Membership.Name, GameXact.Score FROM GameXact "
-                					+ "JOIN Membership ON GameXact.GameID = " + String.valueOf(gid)
+                					+ "SELECT Membership.Name, GameXact.Score FROM dilanm.GameXact "
+                					+ "JOIN dilanm.Membership ON GameXact.GameID = " + String.valueOf(gid)
                 					+ " AND Membership.MemberID = GameXact.MemberID ORDER BY Score DESC)"
                 					+ " WHERE ROWNUM = 1";
                 			
