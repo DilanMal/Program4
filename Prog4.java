@@ -25,6 +25,8 @@ import java.sql.*;                 // For access to the SQL interaction methods
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -446,50 +448,49 @@ public class Prog4{
                     break;
 
                 case 10:
-                    //prizes they can buy
+                    // prizes they can buy
                     try {
-                        // Execute SQL query to list arcade rewards that members can purchase with tickets
+
                         String query = "SELECT Prize.PName, Prize.TicketCost " +
-                                       "FROM dilanm.Prize";
+                                    "FROM dilanm.Prize";
                         ResultSet resultSet = stmt.executeQuery(query);
-                
-                        // Display results
+
+                        List<String> prizeList = new ArrayList<>();
                         System.out.println("Arcade rewards that members can purchase with tickets:");
                         while (resultSet.next()) {
                             String prizeName = resultSet.getString("PName");
                             int ticketCost = resultSet.getInt("TicketCost");
+                            prizeList.add(prizeName + " - Ticket Cost: " + ticketCost);
                             System.out.println(prizeName + " - Ticket Cost: " + ticketCost);
                         }
-                
-                        //input the member ID to check available tickets
+
+                        // input the member ID to check available tickets
                         System.out.print("\nEnter member ID to check available tickets: ");
                         int memberId = Integer.parseInt(kb.nextLine());
-                
-                        //retrieve member's available tickets
+
+                        // retrieve member's available tickets
                         String ticketQuery = "SELECT Tickets " +
-                                             "FROM dilanm.Membership " +
-                                             "WHERE MemberID = " + memberId;
+                                            "FROM dilanm.Membership " +
+                                            "WHERE MemberID = " + memberId;
                         ResultSet ticketResult = stmt.executeQuery(ticketQuery);
                         int availableTickets = 0;
                         if (ticketResult.next()) {
                             availableTickets = ticketResult.getInt("Tickets");
                         }
-                
-                        //available tickets
-                        System.out.println("Available tickets for member " + memberId + ": " + availableTickets);
-                        //FIX THISS!!!!!
-                        //Iterate through prizes again to check affordability
-                        resultSet.beforeFirst();
-                        System.out.println("Affordable prizes for member " + memberId + ":");
-                        while (resultSet.next()) {
-                            String prizeName = resultSet.getString("PName");
-                            int ticketCost = resultSet.getInt("TicketCost");
+
+                        System.out.println("\nAvailable tickets for member " + memberId + ": " + availableTickets);
+
+                        // Check affordability of prizes using the stored list
+                        System.out.println("\nAffordable prizes for member " + memberId + ":");
+                        for (String prize : prizeList) {
+                            int ticketCost = Integer.parseInt(prize.split(" - Ticket Cost: ")[1]);
                             if (availableTickets >= ticketCost) {
-                                System.out.println(prizeName + " - Ticket Cost: " + ticketCost);
+                                System.out.println(prize);
                             }
                         }
-                    } catch (Exception e) {
-                        System.out.println("Error");
+                    } catch (SQLException | NumberFormatException e) {
+                        e.printStackTrace();
+                        System.out.println("An error occurred while processing the request.");
                     }
                     break;
                 
