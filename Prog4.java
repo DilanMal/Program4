@@ -445,6 +445,45 @@ public class Prog4{
 
                 case 9:
                     //100 spend
+                    
+                    System.out.println("Members who have spent a 100$ in the last month");
+                    System.out.println("------------------------------------------------");
+                    
+                    try {
+                        // Execute SQL query to get all members who have spent 100 dollars in the current month
+                        String query = "SELECT memberID, sum(Amount) FROM dilanm.TTXact WHERE "
+                        		+ "Category = 'tokens' AND Amount > 0 AND "
+                        		+ "TDate BETWEEN trunc (sysdate, 'mm') AND SYSDATE "
+                        		+ "GROUP BY memberID "
+                        		+ "HAVING sum(Amount) > 10";
+                        ResultSet resultSet = stmt.executeQuery(query);
+                        
+                        //Prints Member info
+                        while (resultSet.next()) {
+                        	//Get member
+                        	query = "SELECT * FROM dilanm.Membership WHERE memberID = " + 
+                        			String.valueOf(resultSet.getInt("memberID"));
+                        	ResultSet memberInfo = stmt.executeQuery(query);
+                        	
+                        	if(!memberInfo.next()) {
+                        		System.out.println("No members");
+                        		break;
+                        	}
+                        	
+                        	//Print Info
+                            System.out.println("MemberID: " + memberInfo.getString("MemberID")
+                            		+ "Name: " + memberInfo.getString("Name")
+                            		+ "TeleNum: " + String.valueOf(memberInfo.getInt("TeleNum"))
+                            		+ "Address: " + memberInfo.getString("Addr")
+                            		+ "TotalSpend: " + String.valueOf(memberInfo.getInt("TotalSpend"))
+                            		+ "LastDate: " + memberInfo.getDate("LastDate")
+                            		+ "Tickets: " + String.valueOf(memberInfo.getInt("Tickets"))
+                            		+ "Tokens: " + String.valueOf(memberInfo.getInt("Tokens")));
+                        }
+                        
+                    } catch (Exception e) {
+                        System.out.println("Error");
+                    }
                     break;
 
                 case 10:
