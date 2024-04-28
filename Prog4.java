@@ -572,7 +572,7 @@ public class Prog4{
                 
                     try {
                         // Execute SQL query to get all plays
-                        String query = "SELECT Score FROM dilanm.GameXact WHERE GameID = (SELECT GameID FROM dilanm.Game WHERE GName = '" + gameName + "') AND MemberID = '" + memID + "' ORDER BY Score";
+                        String query = "SELECT Score FROM dilanm.GameXact WHERE GameID = (SELECT GameID FROM dilanm.Game WHERE GName = '" + gameName + "') AND MemberID = '" + memID + "'";
                         ResultSet resultSet = stmt.executeQuery(query);
 
                         if (!resultSet.next()) {
