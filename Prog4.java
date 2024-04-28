@@ -450,7 +450,7 @@ public class Prog4{
                 case 9:
                     //100 spend
                     
-                    System.out.println("Members who have spent a 100$ in the last month");
+                    System.out.println("\nMembers who have spent a 100$ in the last month");
                     System.out.println("------------------------------------------------");
                     
                     try {
