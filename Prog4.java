@@ -404,6 +404,33 @@ public class Prog4{
 
                 case 8:
                     //high scores
+                	try {
+                		System.out.println("Game: High Score Holder");
+                		System.out.println("---------------------");
+                		  
+                		//SQL query to get game names
+                		String query = "SELECT DISTINCT Game.GameID, Game.GName FROM dilanm.Game";
+                		ResultSet game_rslt = stmt.executeQuery(query);
+                		
+                		//Iterate through game names and get highest scorer for game
+                		while (game_rslt.next()) {
+                			int gid = game_rslt.getInt("GameID");
+                			query = "SELECT Name, Score FROM ("
+                					+ "SELECT Membership.Name, GameXact.Score FROM GameXact "
+                					+ "JOIN Membership ON GameXact.GameID = " + String.valueOf(gid)
+                					+ " AND Membership.MemberID = GameXact.MemberID ORDER BY Score DESC)"
+                					+ " WHERE ROWNUM = 1";
+                			
+                			ResultSet score_rslt = stmt.executeQuery(query);
+                			
+                			//Print Game and top scorer
+                			if(score_rslt.next()) {
+                				System.out.println(game_rslt.getString("GName") + ": " + score_rslt.getString("Name"));
+                			}
+                		}
+                	} catch (Exception e) {
+                        System.out.println("Error");
+                	}
                     break;
 
                 case 9:
