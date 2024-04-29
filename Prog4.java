@@ -593,6 +593,51 @@ public class Prog4{
                     
                 case 12:
                     //member coupons
+                	
+                	try {
+                        // Execute SQL query to get all members visited within last month
+                        String query = "SELECT MemberID FROM dilanm.Membership WHERE "
+                        		+ "LastDate BETWEEN trunc (sysdate, 'mm') AND SYSDATE";
+                        ResultSet resultSet = stmt.executeQuery(query);
+
+                        //Create second stmt
+                        Statement stmt2 = dbconn.createStatement();
+                        
+                        //Get coupons
+                        query = "SELECT CouponID FROM dilanm.Coupon";
+                        ResultSet couponResult = stmt2.executeQuery(query);
+                        ArrayList<String> coupon;
+                        //Add coupons to array
+                        while(couponResult.next()) {
+                        	coupon.add(String.valueOf(couponResult.getInt("CouponID")));
+                        }
+                        
+                        //Gen random CXactID
+                        int CXact = generateRandomId(stmt2, "dilanm.CouponXact", "CXactID");
+                        
+                        //Prints Member info
+                        while (resultSet.next()) {
+                        	//Get random coupon
+                        	Random random = new Random();
+                            int index = random.nextInt(0, coupon.size());
+                        	
+                        	query = "INSERT INTO dilanm.CouponXact VALUES ("
+                        			+ String.valueOf(resultSet.getInt(CXact)) + ", "
+                        			+ String.valueOf(resultSet.getInt("MemberID")) + ", "
+									+ coupon.get(index) + ")";
+                        	
+                        	stmt2.executeQuery(query);
+                        	
+                        	//Print Info
+                            System.out.println("Coupon " + coupon.get(index) + " given to "
+                            		+ String.valueOf(resultSet.getInt("MemberID")));
+                        }
+                        
+                        stmt2.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        System.out.println("Error executing SQL query: " + e.getMessage());
+                    }
                     break;
 
                 case 13:
