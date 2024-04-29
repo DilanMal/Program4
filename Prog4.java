@@ -592,7 +592,7 @@ public class Prog4{
                     break;          
                     
                 case 12:
-                    //member coupons
+        	//member coupons
                 	
                 	try {
                         // Execute SQL query to get all members visited within last month
@@ -606,31 +606,30 @@ public class Prog4{
                         //Get coupons
                         query = "SELECT CouponID FROM dilanm.Coupon";
                         ResultSet couponResult = stmt2.executeQuery(query);
-                        ArrayList<String> coupon;
+                        ArrayList<String> coupon = new ArrayList<String>();
                         //Add coupons to array
                         while(couponResult.next()) {
                         	coupon.add(String.valueOf(couponResult.getInt("CouponID")));
                         }
                         
-                        //Gen random CXactID
-                        int CXact = generateRandomId(stmt2, "dilanm.CouponXact", "CXactID");
-                        
-                        //Prints Member info
+                        //Prints Coupon transaction info
                         while (resultSet.next()) {
                         	//Get random coupon
                         	Random random = new Random();
-                            int index = random.nextInt(0, coupon.size());
+                            	int index = random.nextInt(coupon.size());
+                            	//Gen random CXactID
+                            	int CXact = generateRandomId(stmt2, "dilanm.CouponXact", "CXactID");
                         	
                         	query = "INSERT INTO dilanm.CouponXact VALUES ("
-                        			+ String.valueOf(resultSet.getInt(CXact)) + ", "
+                        			+ String.valueOf(CXact) + ", "
                         			+ String.valueOf(resultSet.getInt("MemberID")) + ", "
 									+ coupon.get(index) + ")";
                         	
                         	stmt2.executeQuery(query);
                         	
                         	//Print Info
-                            System.out.println("Coupon " + coupon.get(index) + " given to "
-                            		+ String.valueOf(resultSet.getInt("MemberID")));
+                            	System.out.println("Coupon " + coupon.get(index) + " given to "
+                            			+ String.valueOf(resultSet.getInt("MemberID")));
                         }
                         
                         stmt2.close();
@@ -638,7 +637,8 @@ public class Prog4{
                         e.printStackTrace();
                         System.out.println("Error executing SQL query: " + e.getMessage());
                     }
-                    break;
+                    break;       
+
 
                 case 13:
                     // Determine membership tier and benefits for a given member ID
