@@ -1,8 +1,12 @@
 * CSC 460 Program 4, Spring 2024
 * Arcade Management System in JDBC
 * Team members: Dilan Maliyagoda, Aditya Gupta, Noah Sher
-* Run the program: java Prog4 <oracle username> <oracle password>
 * Classpath requirements: export CLASSPATH=/usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:${CLASSPATH}
+* Run the program: 
+    - login to Lectura
+    - export CLASSPATH=/usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:${CLASSPATH}
+    - javac Prog4.java
+    - java Prog4 <oracle username> <oracle password>
 
 Aditya Gupta:
 * Set up JDBC
