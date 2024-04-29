@@ -16,7 +16,7 @@
  * Missing Features: None
  * Other Comments: Some of the code is borrowed from websites jdbc example
  * 
- * Run the program: java JDBC <oracle username> <oracle password> 
+ * Run the program: java Prog4 <oracle username> <oracle password> 
  * Classpath requirements: export CLASSPATH=/usr/lib/oracle/19.8/client64/lib/ojdbc8.jar:${CLASSPATH}
  * 
  */
@@ -158,7 +158,7 @@ public class Prog4{
             username = args[0];
             password = args[1];
         } else {
-            System.out.println("\nUsage:  java JDBC <username> <password>\n"
+            System.out.println("\nUsage:  java Prog4 <username> <password>\n"
                             + "    where <username> is your Oracle DBMS"
                             + " username,\n    and <password> is your Oracle"
                             + " password (not your system password).\n");
